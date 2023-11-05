@@ -1,0 +1,11 @@
+body {
+	margin: 0 0;
+}
+
+.container {
+	height: 100vh;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 128px);
+	grid-template-rows: repeat(auto-fill, 128px);
+	gap: 0px 0px;
+}
