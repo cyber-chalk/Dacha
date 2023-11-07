@@ -5,7 +5,21 @@ body {
 #container {
 	height: 100vh;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 128px);
-	grid-template-rows: repeat(auto-fill, 128px);
+	/* grid-template-columns: repeat(auto-fill, 128px);
+	grid-template-rows: repeat(auto-fill, 128px); */
+	grid-template-columns: repeat(16, 128px);
+	grid-template-rows: repeat(9, 128px);
 	gap: 0px 0px;
+}
+
+#silo {
+	grid-area: 4 / 5;
+	width: 128px;
+}
+
+#tree {
+	grid-area: 5/12;
+	width: 128px;
+	top: -50px;
+	position: relative;
 }
