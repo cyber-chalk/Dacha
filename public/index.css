@@ -3,6 +3,8 @@ body {
 }
 
 #container {
+	position: relative;
+
 	height: 100vh;
 	display: grid;
 	/* grid-template-columns: repeat(auto-fill, 128px);
@@ -13,13 +15,27 @@ body {
 }
 
 #silo {
-	grid-area: 4 / 5;
+	position: absolute;
+	grid-area: 5/3;
 	width: 128px;
 }
 
+/* create divs then put the tiles in and then put the images */
+
 #tree {
+	position: absolute;
 	grid-area: 5/12;
 	width: 128px;
 	top: -50px;
-	position: relative;
+
+}
+
+#axe {
+	position: absolute;
+	grid-area: 4/6;
+}
+
+#tower {
+	position: absolute;
+	grid-area: 2/14/4/-3;
 }
