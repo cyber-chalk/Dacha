@@ -22,11 +22,30 @@ function place(rows, columns) {
 				positioning * -128
 				// Math.floor(getRandom(0, 5)) * -128
 			}px 0`;
-
+			//
 			//
 		}
 	}
 }
+
+function placeEx(rows, columns) {
+	for (let i = 0; i < columns; i++) {
+		for (let n = 0; n < rows; n++) {
+			if (i == 2) {
+				// console.log(columns);
+				let floorBlock = document.createElement("img");
+				floorBlock.src = "./images/floor.png";
+				document.getElementById("container").append(floorBlock);
+
+				floorBlock.style =
+					"width: 128px; height: 128px; object-fit: cover";
+				floorBlock.style.gridRow = n + 1;
+				floorBlock.style.gridColumn = i + 1;
+			}
+		}
+	}
+}
+
 let dirtRow = 0;
 let keyPair = {};
 
@@ -84,44 +103,8 @@ function placeDirt(x, y) {
 
 		// split up the array into same columns
 	}
-
-	// for (
-	// 	let i = 0;
-	// 	i < document.getElementsByClassName("dirtBlock").length;
-	// 	i++
-	// ) {
-	// 	let area = window.getComputedStyle(
-	// 		document
-	// 			.getElementsByClassName("dirtBlock")
-	// 			[i].getPropertyValue("grid-area")
-	// 	);
-	//         if (loop(area[area.length-1] - 1) )  {
-	//             // how do you check if a square/img has the grid area
-	//         } else {
-
-	//         }
-
-	// }
-	// // check for grid area css propity
 }
 placeDirt(7, 11);
-function loop(FArea, x, y) {
-	for (
-		let i = 0;
-		i < i < document.getElementsByClassName("dirtBlock").length;
-		i++
-	) {
-		if (
-			window.getComputedStyle(
-				document
-					.getElementsByClassName("dirtBlock")
-					[i].getPropertyValue("grid-area")
-			) == FArea
-		)
-			return true;
-	}
-	return false;
-}
 
 // just loop through every time a tile is placed to check proper tile
 
@@ -135,6 +118,17 @@ function getRandom(min, max) {
 
 // repositon
 place(
+	window
+		.getComputedStyle(document.getElementById("container"))
+		.getPropertyValue("grid-template-rows")
+		.split(" ").length,
+	window
+		.getComputedStyle(document.getElementById("container"))
+		.getPropertyValue("grid-template-columns")
+		.split(" ").length
+);
+
+placeEx(
 	window
 		.getComputedStyle(document.getElementById("container"))
 		.getPropertyValue("grid-template-rows")
