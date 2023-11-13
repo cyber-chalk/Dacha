@@ -7,6 +7,8 @@ function place(rows, columns) {
 			grass.style.gridRow = n + 1;
 			grass.style.gridColumn = i + 1;
 
+			grass.classList.list.add("grass");
+
 			grass.style = "width: 128px; height: 128px;";
 			grass.style.objectFit = "cover";
 
@@ -24,27 +26,33 @@ function place(rows, columns) {
 			}px 0`;
 			//
 			//
-		}
-	}
-}
 
-function placeEx(rows, columns) {
-	for (let i = 0; i < columns; i++) {
-		for (let n = 0; n < rows; n++) {
-			if (i == 2) {
-				// console.log(columns);
-				let floorBlock = document.createElement("img");
-				floorBlock.src = "./images/floor.png";
-				document.getElementById("container").append(floorBlock);
+			if (i == 1 || i == 2) {
+				if (n == 1 || n == 2) {
+					// console.log(columns);
+					let floorBlock = document.createElement("img");
+					floorBlock.src = "./images/floor.png";
+					floorBlock.classList.add("floor");
+					document.getElementById("container").append(floorBlock);
 
-				floorBlock.style =
-					"width: 128px; height: 128px; object-fit: cover";
-				floorBlock.style.gridRow = n + 1;
-				floorBlock.style.gridColumn = i + 1;
+					floorBlock.style =
+						"width: 128px; height: 128px; object-fit: cover";
+					floorBlock.style.gridRow = n + 1;
+					floorBlock.style.gridColumn = i + 1;
+
+					// put the roof on the floor,
+					// get grid-row of lowest square then loop through each one again
+				}
 			}
 		}
 	}
 }
+
+// function placeEx(rows, columns) {
+// 	for (let i = 0; i < columns; i++) {
+// 		for (let n = 0; n < rows; n++) {}
+// 	}
+// }
 
 let dirtRow = 0;
 let keyPair = {};
@@ -128,7 +136,35 @@ place(
 		.split(" ").length
 );
 
-placeEx(
+// placeEx(
+// 	window
+// 		.getComputedStyle(document.getElementById("container"))
+// 		.getPropertyValue("grid-template-rows")
+// 		.split(" ").length,
+// 	window
+// 		.getComputedStyle(document.getElementById("container"))
+// 		.getPropertyValue("grid-template-columns")
+// 		.split(" ").length
+// );
+
+function plantTrees(rows, columns) {
+	let storage = [];
+
+	let imgs = Array.from(document.getElementsByTagName("img"));
+
+	for (let i = 0; i < imgs.length; i++) {
+		if (imgs[i].classList[0] == "grass") continue;
+		// imgs.splice(i, 1)
+		storage.push(
+			window.getComputedStyle(imgs[i]).getPropertyValue("grid-area")
+		);
+	}
+	for (let i = 0; i < storage.length; i++) {
+		
+	}
+}
+
+plantTrees(
 	window
 		.getComputedStyle(document.getElementById("container"))
 		.getPropertyValue("grid-template-rows")
@@ -138,7 +174,3 @@ placeEx(
 		.getPropertyValue("grid-template-columns")
 		.split(" ").length
 );
-
-// looping system
-//coords sytem / normal
-// other loop O(n)

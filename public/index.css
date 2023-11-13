@@ -39,3 +39,14 @@ body {
 	position: absolute;
 	grid-area: 2/14/4/-3;
 }
+
+.floor {
+	position: absolute;
+	width: 128px;
+}
+
+.roof {
+	position: absolute;
+	width: 128px;
+	object-fit: cover;
+}
