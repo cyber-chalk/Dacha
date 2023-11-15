@@ -7,7 +7,7 @@ function place(rows, columns) {
 			grass.style.gridRow = n + 1;
 			grass.style.gridColumn = i + 1;
 
-			grass.classList.list.add("grass");
+			grass.classList.add("grass");
 
 			grass.style = "width: 128px; height: 128px;";
 			grass.style.objectFit = "cover";
@@ -56,6 +56,8 @@ function place(rows, columns) {
 
 let dirtRow = 0;
 let keyPair = {};
+let currentBar = 1;
+// let dirtPositions = [];
 
 function placeDirt(x, y) {
 	let dirt = document.createElement("img");
@@ -112,7 +114,6 @@ function placeDirt(x, y) {
 		// split up the array into same columns
 	}
 }
-placeDirt(7, 11);
 
 // just loop through every time a tile is placed to check proper tile
 
@@ -159,8 +160,45 @@ function plantTrees(rows, columns) {
 			window.getComputedStyle(imgs[i]).getPropertyValue("grid-area")
 		);
 	}
-	for (let i = 0; i < storage.length; i++) {
-		
+
+	for (let i = 0; i < 15; i++) {
+		let randCol = Math.floor(getRandom(1, columns));
+		let randRow = Math.floor(getRandom(1, rows));
+		let springlock = false;
+
+		for (let j = 0; j < storage.length; j++) {
+			if (`${randRow} / ${randCol} / auto / auto` === storage[j]) {
+				springlock = true;
+				// console.log(storage[j], 7777, `${randRow} / ${randCol}`);
+				break;
+			}
+			if (
+				`${randRow} / ${randCol}` == "2 / 14" ||
+				`${randRow} / ${randCol}` == "3 / 15" ||
+				`${randRow} / ${randCol}` == "2 / 15" ||
+				`${randRow} / ${randCol}` == "3 / 14"
+			) {
+				console.log(`${randRow} / ${randCol}`);
+				springlock = true;
+				break;
+			}
+			if (
+				`${randRow} / ${randCol}` == "5 / 3" ||
+				`${randRow} / ${randCol}` == "5 / 4" ||
+				`${randRow} / ${randCol}` == "6 / 4" ||
+				`${randRow} / ${randCol}` == "6 / 3"
+			) {
+				springlock = true;
+				break;
+			}
+		}
+		if (springlock) continue;
+
+		let img = document.createElement("img");
+		img.src = "./images/trees.png";
+		document.getElementById("container").append(img);
+		img.style = "width: 128px; top: -50px; position: absolute; z-index: 11";
+		img.style.gridArea = randRow + "/" + randCol;
 	}
 }
 
@@ -174,3 +212,115 @@ plantTrees(
 		.getPropertyValue("grid-template-columns")
 		.split(" ").length
 );
+
+document.addEventListener("keydown", function (event) {
+	// let cursor = window.getComputedStyle(document.getElementById("cursor"));
+	let id = document.getElementById("cursor");
+
+	let row = parseInt(
+		window
+			.getComputedStyle(document.getElementById("cursor"))
+			.getPropertyValue("grid-row-start")
+	);
+	let column = parseInt(
+		window
+			.getComputedStyle(document.getElementById("cursor"))
+			.getPropertyValue("grid-column-start")
+	);
+
+	if (event.key == "w") {
+		// console.log(event.key);
+		id.style.gridRowStart = row -= 1;
+		check(row, column);
+	} else if (event.key == "s") {
+		// console.log(event.key);
+		id.style.gridRowStart = row += 1;
+		check(row, column);
+	} else if (event.key == "d") {
+		// console.log(event.key);
+		id.style.gridColumnStart = column += 1;
+		check(row, column);
+	} else if (event.key == "a") {
+		// console.log(event.key);
+		id.style.gridColumnStart = column -= 1;
+		check(row, column);
+	}
+
+	if (event.code == "Space") {
+		let storage = [];
+
+		let imgs = Array.from(document.getElementsByTagName("img"));
+
+		for (let i = 0; i < imgs.length; i++) {
+			if (imgs[i].classList[0] == "grass") continue;
+			if (imgs[i].id == "cursor") continue;
+			// imgs.splice(i, 1)
+			storage.push(
+				window.getComputedStyle(imgs[i]).getPropertyValue("grid-area")
+			);
+		}
+		let springlock = false;
+		for (let j = 0; j < storage.length; j++) {
+			if (`${row} / ${column} / auto / auto` === storage[j]) {
+				springlock = true;
+				break;
+			}
+		}
+		if (!springlock) {
+			if (currentBar == 2) return placeDirt(row, column);
+
+			let fn = document.getElementById("slot" + currentBar).children[0]
+				.dataset.imga;
+
+			let element = document.createElement("img");
+			element.src = "./images/" + fn + ".png";
+			document.getElementById("container").append(element);
+			element.style = "width: 128px; height: 128px; position: absolute;";
+			element.style.gridArea = `${row} / ${column}`;
+			if ((element.src = "./images/sprout.png"))
+				planted(element, row, column);
+		}
+	}
+
+	if (!isNaN(parseInt(event.key))) {
+		let hotBar = document.querySelectorAll("#hotbar div");
+		for (let i = 0; i < hotBar.length; i++) {
+			document.querySelectorAll("#hotbar div")[i].style.backgroundColor =
+				"#685262";
+		}
+
+		document.getElementById("slot" + event.key).style.backgroundColor =
+			"#E9CB8F";
+		if (event.key <= 7) currentBar = parseInt(event.key);
+	}
+});
+
+function check(row, column) {
+	let roofs = document.getElementsByClassName("roof");
+	let inn = false;
+	for (let i = 0; i < roofs.length; i++) {
+		if (
+			window.getComputedStyle(roofs[i]).getPropertyValue("grid-area") ==
+			`${row} / ${column} / auto / auto`
+		) {
+			inn = true;
+			document.querySelectorAll(".roof").forEach((element) => {
+				element.style.opacity = "0.1";
+			});
+		}
+	}
+	if (!inn) {
+		document.querySelectorAll(".roof").forEach((element) => {
+			element.style.opacity = "1";
+		});
+	}
+}
+
+function planted(element, row, column) {
+	setTimeout(() => {
+		element.src = "./images/trees.png";
+		element.style =
+			" width: 128px; top: -50px; position: absolute; z-index: 11;";
+		element.style.gridArea = `${row} / ${column}`;
+	}, 1000);
+}
